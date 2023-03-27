@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 public class LogData  {
     public List<ModelLog> datalogs = new ArrayList<>();
     public Map<String,Integer> ipaddress = new HashMap<>();
-    public Map<String,Integer> brower = new HashMap<>();
-    public String importLogfile(String filename){
+    public Map<String,Integer> browser = new HashMap<>();
+    public void importLogfile(String filename){
         try{
             FileInputStream fileInputStream = new FileInputStream(filename);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
@@ -20,21 +20,20 @@ public class LogData  {
             }
             fileInputStream.close();
             mapIpAddress();
-            mapBrower();
+            mapBrowser();
         }
         catch (Exception e){
-            return "Error.importLog";
+            System.out.println("Error");
         }
-        return "Import_Setter_Success ";
     }
 
     public ModelLog setterLog(String str_line){
         String[] strings = str_line.split("\"");
         String[] stringsOfZero = strings[0].split("- -");
         //CHECK SPLIT
-//        for (String str : strings){
-//            System.out.println(str);
-//        }
+        //        for (String str : strings){
+        //            System.out.println(str);
+        //        }
         ModelLog log = new ModelLog();
         log.setIpAddress(stringsOfZero[0]);
         log.setTime(stringsOfZero[1]);
@@ -43,14 +42,38 @@ public class LogData  {
         log.setReferURL(strings[3]);
         // because 172.71.222.239 - - [08/Mar/2023:05:12:04 +0700] "GET /wp-content/uploads/2019/06/autohome-1-1024x683.jpg HTTP/1.1" 200 80234 "-" "" มัน split ได้ 5 ตัว เเต่จริงๆต้อง 6
         if (strings.length == 5){
-            log.setBrower("-");
+            log.setBrowser("-");
         }
         else{
-            log.setBrower(strings[5]);
+            log.setBrowser(strings[5]);
         }
 //        System.out.println(log);
         return log;
     }
+
+
+    public Integer getSizeOfBrowser(){
+        return browser.size();
+    }
+    public Set<String> getBrowser(){
+        return browser.keySet();
+    }
+    public Set<String> getIpAddress(){
+        return ipaddress.keySet();
+    }
+    public Integer getSizeDataLogs(){
+        return datalogs.size();
+    }
+    public Integer getSizeOfIpAddress(){
+        return ipaddress.keySet().size();
+    }
+    public List<List<String>> topBrowser(){
+        return coventToTop(browser);
+    }
+    public List<List<String>> topIpAddress(){
+        return coventToTop(ipaddress);
+    }
+
 
     private void mapIpAddress(){
         for (ModelLog log:datalogs) {
@@ -62,36 +85,15 @@ public class LogData  {
         }
 
     }
-    private void mapBrower(){
+    private void mapBrowser(){
         for (ModelLog log:datalogs){
-            if(!brower.containsKey(log.getBrower())){
-                brower.put(log.getBrower(),1);
+            if(!browser.containsKey(log.getBrowser())){
+                browser.put(log.getBrowser(),1);
             }
             else{
-                brower.replace(log.getBrower(),brower.get(log.getBrower()),brower.get(log.getBrower())+1);
+                browser.replace(log.getBrowser(),browser.get(log.getBrowser()),browser.get(log.getBrowser())+1);
             }
         }
-    }
-    public Integer getSizeOfBrower(){
-        return brower.size();
-    }
-    public Set<String> getBrower(){
-        return brower.keySet();
-    }
-    public Set<String> getIpAddress(){
-        return ipaddress.keySet();
-    }
-    public Integer getSizeDataLogs(){
-        return datalogs.size();
-    }
-    public Integer getSizeOfIpAddress(){
-        return ipaddress.keySet().size();
-    }
-    public List<List<String>> topBrower(){
-        return coventToTop(brower);
-    }
-    public List<List<String>> topIpAddress(){
-        return coventToTop(ipaddress);
     }
     private List<List<String>> coventToTop(Map<String,Integer> map){
         List<List<String>> lists= new ArrayList<>();
@@ -109,7 +111,7 @@ public class LogData  {
         Set<Entry<String, Integer>> set = map.entrySet();
         List<Entry<String, Integer>> list = new ArrayList<>(
                 set);
-        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        list.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
 
         return list.subList(0,10);
     }

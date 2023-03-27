@@ -4,7 +4,7 @@ public class ModelLog {
     private String deviceType;
     private String newAttr;
     private String referURL;
-    private String brower;
+    private String browser;
 
     @Override
     public String toString() {
@@ -14,7 +14,7 @@ public class ModelLog {
                 ", deviceType='" + deviceType + '\'' +
                 ", newAttr='" + newAttr + '\'' +
                 ", referURL='" + referURL + '\'' +
-                ", brower='" + brower + '\'' +
+                ", brower='" + browser + '\'' +
                 '}';
     }
 
@@ -50,10 +50,10 @@ public class ModelLog {
     public void setReferURL(String referURL) {
         this.referURL = referURL;
     }
-    public String getBrower() {
-        return brower;
+    public String getBrowser() {
+        return browser;
     }
-    public void setBrower(String brower) {
-        this.brower = brower;
+    public void setBrowser(String browser) {
+        this.browser = browser;
     }
 }
